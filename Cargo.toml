@@ -1,0 +1,40 @@
+[package]
+name = "personal-app"
+authors = ["s4b11 <s4b11@users.noreply.github.com>"]
+description = "Personal toolbox: command & link savers, JSON and Markdown tools"
+version = "0.1.0"
+rust-version = "1.78"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+anyhow = "1"
+spin-sdk = "3.1.0"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+argon2 = "0.5"
+getrandom = "0.2"
+sha2 = "0.10"
+subtle = "2"
+hex = "0.4"
+form_urlencoded = "1"
+pulldown-cmark = { version = "0.12", default-features = false, features = ["html"] }
+ammonia = "4"
+include_dir = "0.7"
+chrono = { version = "0.4", default-features = false, features = ["alloc"] }
+aes-gcm = "0.10"
+hmac = "0.12"
+sha1 = "0.10"
+qrcode = { version = "0.14", default-features = false, features = ["svg"] }
+
+[profile.release]
+opt-level = "s"
+lto = true
+strip = true
+codegen-units = 1
+
+[workspace]
+members = ["."]
+exclude = ["src-tauri"]

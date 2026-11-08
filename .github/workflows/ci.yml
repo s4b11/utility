@@ -1,0 +1,78 @@
+name: CI
+
+# Type-checks and builds the web frontend, then builds the Spin (wasm) server that
+# embeds it. Runs on every pull request and on pushes to branches other than main;
+# the Release workflow calls it on main before deploying.
+
+on:
+  pull_request:
+  push:
+    branches-ignore: [main]
+  workflow_call:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  # Only superseded PR runs are cancelled; release runs on main always finish.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  web:
+    name: Web frontend
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm --prefix frontend ci
+
+      - name: Type-check and build
+        run: npm --prefix frontend run build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: web-dist
+          path: dist
+          if-no-files-found: error
+          retention-days: 7
+
+  server:
+    name: Spin server (wasm)
+    needs: web
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: web-dist
+          path: dist
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-wasip1
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Unit tests
+        run: cargo test --locked --lib
+
+      - name: Build wasm component
+        run: cargo build --locked --release --target wasm32-wasip1
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: server-wasm
+          path: target/wasm32-wasip1/release/personal_app.wasm
+          if-no-files-found: error
+          retention-days: 7

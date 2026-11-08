@@ -1,0 +1,44 @@
+#:schema https://schemas.spinframework.dev/spin/manifest-v2/latest.json
+
+spin_manifest_version = 2
+
+[application]
+name = "personal-app"
+version = "0.1.0"
+authors = ["s4b11 <s4b11@users.noreply.github.com>"]
+description = ""
+
+[variables]
+# Master key for at-rest encryption of wallet secrets (card numbers, CVVs,
+# account numbers). Set in cloud via `spin cloud deploy --variable wallet_key=...`
+# (persisted) or locally via the SPIN_VARIABLE_WALLET_KEY env var.
+wallet_key = { required = true, secret = true }
+# Webhook secret for external job ingestion from Google Apps Script.
+webhook_secret = { default = "", secret = true }
+groq_api_key = { default = "", secret = true }
+groq_api_origin = { default = "https://api.groq.com" }
+# Origin of the Google Apps Script relay used to send template emails through Gmail.
+email_relay_origin = { default = "https://script.google.com" }
+
+[[trigger.http]]
+route = "/..."
+component = "personal-app"
+
+[component.personal-app]
+source = "target/wasm32-wasip1/release/personal_app.wasm"
+allowed_outbound_hosts = [
+  "https://api.groq.com",
+  # Gmail relay: Apps Script web apps answer on script.google.com and redirect to googleusercontent.
+  "https://script.google.com",
+  "https://script.googleusercontent.com",
+]
+sqlite_databases = ["default"]
+[component.personal-app.variables]
+wallet_key = "{{ wallet_key }}"
+webhook_secret = "{{ webhook_secret }}"
+groq_api_key = "{{ groq_api_key }}"
+groq_api_origin = "{{ groq_api_origin }}"
+email_relay_origin = "{{ email_relay_origin }}"
+[component.personal-app.build]
+command = "npm --prefix frontend run build && cargo build --target wasm32-wasip1 --release"
+watch = ["src/**/*.rs", "Cargo.toml", "migrations/**/*.sql", "frontend/src/**/*", "frontend/index.html"]

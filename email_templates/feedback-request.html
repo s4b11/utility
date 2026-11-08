@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Your feedback</title>
+</head>
+<body style="margin:0;padding:0;background:#EDF6F7;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#EDF6F7;">
+<tr><td align="center" style="padding:32px 16px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:#FFFFFF;border-radius:16px;border:1px solid #E8EAEE;">
+<tr><td align="center" style="padding:40px 40px 8px;">
+<p style="margin:0 0 14px;font-size:30px;letter-spacing:6px;color:#F5B400;">&#9733;&#9733;&#9733;&#9733;&#9733;</p>
+<p style="margin:0 0 8px;font-size:22px;font-weight:700;line-height:1.3;color:#16181D;">How did we do?</p>
+<p style="margin:0 0 20px;font-size:15px;color:#6B7280;">We'd love your thoughts on {{topic}}.</p>
+</td></tr>
+<tr><td style="padding:0 40px 8px;">
+<p style="margin:0 0 16px;font-size:15px;line-height:1.65;color:#374151;">Hi {{recipient_name}},</p>
+{{#message}}{{message}}{{/message}}{{^message}}<p style="margin:0 0 16px;font-size:15px;line-height:1.65;color:#374151;">Your honest feedback helps us improve. It would mean a lot if you could share a few thoughts.</p>{{/message}}
+{{#survey_url}}<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:8px auto 24px;"><tr><td style="border-radius:999px;background:#0E7C86;"><a href="{{survey_url}}" style="display:inline-block;padding:13px 26px;font-size:15px;font-weight:600;color:#FFFFFF;text-decoration:none;">Share feedback</a></td></tr></table>{{/survey_url}}
+<p style="margin:0 0 24px;font-size:13px;text-align:center;color:#6B7280;">{{#time_needed}}Takes about {{time_needed}}{{/time_needed}}{{#deadline}}{{#time_needed}} · {{/time_needed}}Please reply by {{deadline}}{{/deadline}}</p>
+<p style="margin:8px 0 4px;font-size:15px;line-height:1.65;color:#374151;">Thank you,</p><p style="margin:0 0 24px;font-weight:600;font-size:15px;color:#16181D;">{{sender_name}}</p>
+{{#signature}}<div style="padding-top:16px;border-top:1px solid #E8EAEE;">{{signature}}</div>{{/signature}}
+</td></tr>
+<tr><td style="padding:8px 40px 32px;font-size:12px;color:#8A909B;">{{#sender_email}}<a href="{{sender_email_url}}" style="color:#8A909B;text-decoration:none;">{{sender_email}}</a>{{/sender_email}}</td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>

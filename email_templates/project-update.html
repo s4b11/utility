@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>{{project_name}} update</title>
+</head>
+<body style="margin:0;padding:0;background:#F6F7F9;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F6F7F9;">
+<tr><td align="center" style="padding:32px 16px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;background:#FFFFFF;border-radius:16px;border:1px solid #E8EAEE;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+<tr><td style="padding:32px 36px 20px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+<td valign="top">
+<p style="margin:0;font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#8A909B;">Project update{{#period}} &middot; {{period}}{{/period}}</p>
+<h1 style="margin:6px 0 0;font-size:24px;line-height:1.25;font-weight:700;color:#16181D;">{{project_name}}</h1>
+</td>
+<td valign="top" align="right">
+<span style="display:inline-block;padding:6px 12px;border-radius:999px;background:#EEF3FE;color:#2563EB;font-size:13px;font-weight:600;white-space:nowrap;">&#9679; {{status}}</span>
+</td>
+</tr></table>
+</td></tr>
+<tr><td style="padding:4px 36px 8px;">
+<p style="margin:0 0 16px;font-size:15px;line-height:1.65;color:#374151;">Hi {{#recipient_name}}{{recipient_name}}{{/recipient_name}}{{^recipient_name}}all{{/recipient_name}},</p>
+{{summary}}
+{{#highlights}}<p style="margin:8px 0 10px;font-size:13px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#11824B;">&#10003; Highlights</p>
+<ul style="margin:0 0 20px;padding-left:20px;">{{highlights}}</ul>{{/highlights}}
+{{#next_steps}}<p style="margin:8px 0 10px;font-size:13px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#2563EB;">&rarr; Next steps</p>
+<ul style="margin:0 0 20px;padding-left:20px;">{{next_steps}}</ul>{{/next_steps}}
+{{#blockers}}<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:4px 0 24px;background:#FDF3E2;border-radius:12px;"><tr><td style="padding:16px 18px 2px;">
+<p style="margin:0 0 8px;font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#A45A00;">Risks &amp; blockers</p>
+{{blockers}}
+</td></tr></table>{{/blockers}}
+<p style="margin:8px 0 4px;font-size:15px;line-height:1.65;color:#374151;">Thanks,</p>
+<p style="margin:0 0 24px;font-size:15px;font-weight:600;color:#16181D;">{{sender_name}}</p>
+{{#signature}}<div style="padding-top:16px;border-top:1px solid #E8EAEE;">{{signature}}</div>{{/signature}}
+</td></tr>
+<tr><td style="padding:0 36px 28px;font-size:0;line-height:0;">&nbsp;</td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>

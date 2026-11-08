@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>{{reference}}</title>
+</head>
+<body style="margin:0;padding:0;background:#EEF0F3;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#EEF0F3;">
+<tr><td align="center" style="padding:40px 16px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:620px;background:#FFFFFF;border:1px solid #DDE1E7;">
+<tr><td style="height:6px;background:#16181D;font-size:0;line-height:0;">&nbsp;</td></tr>
+<tr><td style="padding:40px 48px 28px;border-bottom:1px solid #E8EAEE;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+<td style="font-family:Georgia,'Times New Roman',serif;font-size:22px;letter-spacing:0.04em;color:#16181D;">{{#organization}}{{organization}}{{/organization}}{{^organization}}{{sender_name}}{{/organization}}</td>
+<td align="right" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:13px;color:#6B7280;white-space:nowrap;">{{date}}</td>
+</tr></table>
+</td></tr>
+<tr><td style="padding:36px 48px 8px;">
+<p style="margin:0 0 4px;font-family:Georgia,'Times New Roman',serif;font-size:16px;color:#16181D;">{{recipient_name}}</p>
+{{#recipient_title}}<p style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:15px;color:#6B7280;">{{recipient_title}}</p>{{/recipient_title}}
+<p style="margin:28px 0 28px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#16181D;">Re: {{reference}}</p>
+<p style="margin:0 0 18px;font-family:Georgia,'Times New Roman',serif;font-size:16px;line-height:1.7;color:#1F2937;">{{#salutation}}{{salutation}}{{/salutation}}{{^salutation}}Dear {{recipient_name}},{{/salutation}}</p>
+{{body}}
+<p style="margin:28px 0 4px;font-family:Georgia,'Times New Roman',serif;font-size:16px;color:#1F2937;">{{#closing}}{{closing}}{{/closing}}{{^closing}}Yours sincerely,{{/closing}}</p>
+<p style="margin:36px 0 2px;font-family:Georgia,'Times New Roman',serif;font-size:17px;color:#16181D;">{{sender_name}}</p>
+{{#sender_title}}<p style="margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:13px;color:#6B7280;">{{sender_title}}{{#organization}}, {{organization}}{{/organization}}</p>{{/sender_title}}
+{{#signature}}<div style="margin-top:20px;">{{signature}}</div>{{/signature}}
+</td></tr>
+<tr><td style="padding:24px 48px 36px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-top:1px solid #E8EAEE;padding-top:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;color:#8A909B;">
+{{#organization}}{{organization}} &middot; {{/organization}}{{#sender_email}}<a href="{{sender_email_url}}" style="color:#8A909B;text-decoration:none;">{{sender_email}}</a>{{/sender_email}}
+</td></tr></table>
+</td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>

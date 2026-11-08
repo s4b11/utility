@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Quotation {{quote_number}}</title>
+</head>
+<body style="margin:0;padding:0;background:#EEF2FB;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#EEF2FB;">
+<tr><td align="center" style="padding:32px 16px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:#FFFFFF;border-radius:16px;border:1px solid #E8EAEE;overflow:hidden;">
+<tr><td style="background:#1D4ED8;padding:28px 40px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+<td style="font-size:13px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#C7D7FE;">{{#business_name}}{{business_name}}{{/business_name}}{{^business_name}}{{sender_name}}{{/business_name}}</td>
+<td align="right" style="font-size:13px;color:#C7D7FE;">Quotation</td></tr>
+<tr><td colspan="2" style="padding-top:10px;font-size:26px;font-weight:700;color:#FFFFFF;">{{quote_number}}</td></tr></table>
+</td></tr>
+<tr><td style="padding:28px 40px 4px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 24px;"><tr>
+<td style="vertical-align:top;"><p style="margin:0 0 4px;font-size:12px;color:#6B7280;">Prepared for</p><p style="margin:0;font-size:16px;font-weight:600;color:#16181D;">{{client_name}}</p></td>
+{{#valid_until}}<td align="right" style="vertical-align:top;"><p style="margin:0 0 4px;font-size:12px;color:#6B7280;">Valid until</p><p style="margin:0;font-size:16px;font-weight:600;color:#16181D;">{{valid_until}}</p></td>{{/valid_until}}
+</tr></table>
+{{intro}}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:8px 0 8px;">
+<tr><td style="padding:0 0 8px;border-bottom:2px solid #1D4ED8;font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#1D4ED8;">Item</td>
+<td style="padding:0 0 8px;border-bottom:2px solid #1D4ED8;font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#1D4ED8;text-align:right;">Amount</td></tr>
+{{items}}
+</table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 24px;background:#EEF2FB;border-radius:12px;"><tr>
+<td style="padding:16px 20px;font-size:15px;font-weight:600;color:#16181D;">Total</td>
+<td style="padding:16px 20px;font-size:22px;font-weight:700;color:#1D4ED8;text-align:right;">{{total}}</td></tr></table>
+{{#terms}}<p style="margin:0 0 10px;font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#6B7280;">Terms</p>{{terms}}{{/terms}}
+{{#accept_url}}<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:8px 0 24px;"><tr><td style="border-radius:12px;background:#1D4ED8;"><a href="{{accept_url}}" style="display:inline-block;padding:13px 26px;font-size:15px;font-weight:600;color:#FFFFFF;text-decoration:none;">Accept this quotation</a></td></tr></table>{{/accept_url}}
+<p style="margin:8px 0 4px;font-size:15px;line-height:1.65;color:#374151;">Kind regards,</p><p style="margin:0 0 24px;font-weight:600;font-size:15px;color:#16181D;">{{sender_name}}</p>
+{{#signature}}<div style="padding-top:16px;border-top:1px solid #E8EAEE;">{{signature}}</div>{{/signature}}
+</td></tr>
+<tr><td style="padding:8px 40px 32px;font-size:12px;color:#8A909B;">{{#sender_email}}<a href="{{sender_email_url}}" style="color:#8A909B;text-decoration:none;">{{sender_email}}</a>{{/sender_email}}</td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>

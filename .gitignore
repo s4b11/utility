@@ -1,0 +1,47 @@
+# Rust / wasm build output
+/target
+target/
+src-tauri/target/
+
+# Node dependencies
+/node_modules
+/frontend/node_modules
+
+# Build outputs
+/dist
+/frontend/dist
+
+# Local Spin SQLite database + runtime state
+/.spin
+
+# Dev verification screenshots
+/screenshots
+
+# Tool configs and local settings
+/.claude
+/.cargo
+src-tauri/.cargo
+*.local.*
+wallet_key.local.txt
+key.txt
+
+*.log
+__pycache__/
+*.py[cod]
+.DS_Store
+Thumbs.db
+
+# Android / Mobile build outputs
+src-tauri/gen/android/.gradle/
+src-tauri/gen/android/app/build/
+src-tauri/gen/android/buildSrc/build/
+src-tauri/gen/android/build/
+src-tauri/gen/android/app/src/main/jniLibs/
+*.apk
+
+# NOTE: generated assets are committed on purpose so a bare `cargo build`
+# (which embeds them via include_dir!) works without first running npm:
+#   assets/css/output.css, assets/icons/sprite.svg, assets/fonts/*.woff2
+
+# TypeScript build cache
+*.tsbuildinfo

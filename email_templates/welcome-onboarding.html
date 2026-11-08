@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Welcome, {{name}}</title>
+</head>
+<body style="margin:0;padding:0;background:#EEF2FB;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#EEF2FB;">
+<tr><td align="center" style="padding:32px 16px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:#FFFFFF;border-radius:16px;border:1px solid #E8EAEE;overflow:hidden;">
+<tr><td align="center" style="background:#2563EB;padding:40px 40px 34px;">
+<p style="margin:0 0 10px;font-size:40px;line-height:1;">&#128075;</p>
+<p style="margin:0;font-size:26px;font-weight:700;line-height:1.3;color:#FFFFFF;">Welcome to {{team}}, {{name}}!</p>
+</td></tr>
+<tr><td style="padding:28px 40px 8px;">
+{{message}}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 24px;"><tr>
+{{#start_date}}<td style="padding:14px 16px;background:#F3F6FD;border-radius:12px;"><p style="margin:0 0 2px;font-size:12px;color:#6B7280;">Start date</p><p style="margin:0;font-size:15px;font-weight:600;color:#16181D;">{{start_date}}</p></td>{{/start_date}}
+{{#start_date}}{{#manager}}<td style="width:12px;"></td>{{/manager}}{{/start_date}}
+{{#manager}}<td style="padding:14px 16px;background:#F3F6FD;border-radius:12px;"><p style="margin:0 0 2px;font-size:12px;color:#6B7280;">Your buddy / manager</p><p style="margin:0;font-size:15px;font-weight:600;color:#16181D;">{{manager}}</p></td>{{/manager}}
+</tr></table>
+{{#checklist}}<p style="margin:0 0 10px;font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#2563EB;">Your first week</p><ul style="margin:0 0 24px;padding-left:20px;">{{checklist}}</ul>{{/checklist}}
+{{#cta_url}}<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:8px 0 24px;"><tr><td style="border-radius:12px;background:#2563EB;"><a href="{{cta_url}}" style="display:inline-block;padding:13px 26px;font-size:15px;font-weight:600;color:#FFFFFF;text-decoration:none;">{{#cta_label}}{{cta_label}}{{/cta_label}}{{^cta_label}}Get started{{/cta_label}}</a></td></tr></table>{{/cta_url}}
+<p style="margin:8px 0 4px;font-size:15px;line-height:1.65;color:#374151;">Glad to have you,</p><p style="margin:0 0 24px;font-weight:600;font-size:15px;color:#16181D;">{{sender_name}}</p>
+{{#signature}}<div style="padding-top:16px;border-top:1px solid #E8EAEE;">{{signature}}</div>{{/signature}}
+</td></tr>
+<tr><td style="padding:8px 40px 32px;font-size:12px;color:#8A909B;">{{#sender_email}}<a href="{{sender_email_url}}" style="color:#8A909B;text-decoration:none;">{{sender_email}}</a>{{/sender_email}}</td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>

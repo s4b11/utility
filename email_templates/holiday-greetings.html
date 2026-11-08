@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>{{occasion}}</title>
+</head>
+<body style="margin:0;padding:0;background:#1F3A2E;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#1F3A2E;">
+<tr><td align="center" style="padding:40px 16px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:540px;font-family:Georgia,'Times New Roman',serif;background:#FFFCF5;border-radius:6px;border:6px double #B45309;">
+<tr><td align="center" style="padding:44px 40px 8px;">
+<p style="margin:0 0 12px;font-size:18px;letter-spacing:10px;color:#B45309;">&#10022; &#10022; &#10022;</p>
+<p style="margin:0 0 8px;font-size:34px;color:#7F1D1D;">{{occasion}}</p>
+<p style="margin:0 0 24px;font-size:16px;font-style:italic;color:#6B5B45;">Dear {{#name}}{{name}}{{/name}}{{^name}}friends{{/name}},</p>
+</td></tr>
+<tr><td style="padding:0 44px 8px;">
+{{message}}
+{{#wish}}<p style="margin:8px 0 24px;font-size:19px;font-style:italic;line-height:1.6;text-align:center;color:#7F1D1D;">{{wish}}</p>{{/wish}}
+<p style="margin:0 0 12px;font-size:18px;letter-spacing:10px;text-align:center;color:#B45309;">&#10022;</p>
+<p style="margin:8px 0 4px;font-family:Georgia,'Times New Roman',serif;font-size:15px;line-height:1.65;color:#3B3127;">{{#sign_off}}{{sign_off}}{{/sign_off}}{{^sign_off}}Warm wishes,{{/sign_off}}</p><p style="margin:0 0 24px;font-family:Georgia,'Times New Roman',serif;font-size:22px;font-style:italic;color:#16181D;">{{sender_name}}</p>
+{{#signature}}<div style="padding-top:16px;border-top:1px solid #EADFCF;">{{signature}}</div>{{/signature}}
+</td></tr>
+<tr><td style="padding:8px 44px 36px;font-size:12px;color:#A39382;">{{#sender_email}}<a href="{{sender_email_url}}" style="color:#A39382;text-decoration:none;">{{sender_email}}</a>{{/sender_email}}</td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>

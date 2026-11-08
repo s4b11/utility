@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Invoice {{invoice_number}}</title>
+</head>
+<body style="margin:0;padding:0;background:#F6F7F9;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F6F7F9;">
+<tr><td align="center" style="padding:32px 16px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;background:#FFFFFF;border-radius:16px;border:1px solid #E8EAEE;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+<tr><td style="padding:32px 36px 24px;border-bottom:1px solid #E8EAEE;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+<td valign="top">
+<p style="margin:0;font-size:18px;font-weight:700;color:#16181D;">{{#business_name}}{{business_name}}{{/business_name}}{{^business_name}}{{sender_name}}{{/business_name}}</p>
+{{#sender_email}}<p style="margin:4px 0 0;font-size:13px;color:#8A909B;">{{sender_email}}</p>{{/sender_email}}
+</td>
+<td valign="top" align="right">
+<p style="margin:0;font-size:12px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#11824B;">Invoice</p>
+<p style="margin:4px 0 0;font-size:15px;font-weight:600;color:#16181D;white-space:nowrap;">{{invoice_number}}</p>
+</td>
+</tr></table>
+</td></tr>
+<tr><td style="padding:24px 36px 8px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+<td valign="top" style="padding-bottom:16px;">
+<p style="margin:0;font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#8A909B;">Billed to</p>
+<p style="margin:4px 0 0;font-size:15px;font-weight:600;color:#16181D;">{{client_name}}</p>
+</td>
+{{#issue_date}}<td valign="top" style="padding-bottom:16px;">
+<p style="margin:0;font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#8A909B;">Issued</p>
+<p style="margin:4px 0 0;font-size:15px;color:#16181D;">{{issue_date}}</p>
+</td>{{/issue_date}}
+<td valign="top" align="right" style="padding-bottom:16px;">
+<p style="margin:0;font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#8A909B;">Due</p>
+<p style="margin:4px 0 0;font-size:15px;font-weight:600;color:#C42F3B;white-space:nowrap;">{{due_date}}</p>
+</td>
+</tr></table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:8px 0 0;">
+<tr><td style="padding:0 0 8px;border-bottom:2px solid #16181D;font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#555B66;">Description</td>
+<td style="padding:0 0 8px;border-bottom:2px solid #16181D;font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#555B66;text-align:right;">Amount</td></tr>
+{{items}}
+<tr><td style="padding:16px 0 4px;font-size:15px;font-weight:600;color:#16181D;">Total due</td>
+<td style="padding:16px 0 4px;font-size:22px;font-weight:700;color:#11824B;text-align:right;white-space:nowrap;">{{total}}</td></tr>
+</table>
+{{#payment_link}}<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0 8px;"><tr><td align="center" style="border-radius:12px;background:#11824B;">
+<a href="{{payment_link}}" style="display:block;padding:15px 24px;font-size:15px;font-weight:600;color:#FFFFFF;text-decoration:none;">Pay {{total}} &rarr;</a>
+</td></tr></table>{{/payment_link}}
+{{#notes}}<div style="margin:20px 0 8px;padding:16px 18px 2px;background:#F6F7F9;border-radius:12px;">
+<p style="margin:0 0 8px;font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#8A909B;">Notes</p>
+{{notes}}
+</div>{{/notes}}
+</td></tr>
+<tr><td style="padding:16px 36px 32px;">
+<p style="margin:0 0 4px;font-size:14px;line-height:1.6;color:#374151;">Thank you for your business.</p>
+<p style="margin:0;font-size:14px;font-weight:600;color:#16181D;">{{sender_name}}</p>
+{{#signature}}<div style="margin-top:16px;padding-top:16px;border-top:1px solid #E8EAEE;">{{signature}}</div>{{/signature}}
+</td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>

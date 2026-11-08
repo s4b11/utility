@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Resignation</title>
+</head>
+<body style="margin:0;padding:0;background:#F5F5F4;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F5F5F4;">
+<tr><td align="center" style="padding:32px 16px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;font-family:Georgia,'Times New Roman',serif;background:#FFFFFF;border-radius:4px;border:1px solid #E5E5E4;">
+<tr><td style="padding:44px 48px 8px;">
+<p style="margin:0 0 4px;font-size:13px;letter-spacing:0.16em;text-transform:uppercase;color:#6B7280;">Letter of resignation</p>
+<div style="height:1px;margin:14px 0 28px;background:#D6D3D1;"></div>
+<p style="margin:0 0 18px;font-size:16px;line-height:1.7;color:#1F2937;">Dear {{manager_name}},</p>
+<p style="margin:0 0 18px;font-size:16px;line-height:1.7;color:#1F2937;">Please accept this letter as formal notice of my resignation from my position as {{position}} at {{company}}. My last working day will be <strong>{{last_day}}</strong>.</p>
+{{#body}}{{body}}{{/body}}{{^body}}<p style="margin:0 0 18px;font-size:16px;line-height:1.7;color:#1F2937;">Thank you for the opportunities and support during my time here. I'm grateful for everything I have learned.</p>{{/body}}
+{{#handover}}<p style="margin:8px 0 10px;font-size:15px;color:#1F2937;">To ensure a smooth transition, I plan to:</p><ul style="margin:0 0 24px;padding-left:20px;">{{handover}}</ul>{{/handover}}
+<p style="margin:24px 0 2px;font-size:16px;color:#1F2937;">Sincerely,</p>
+<p style="margin:0 0 24px;font-size:18px;color:#16181D;">{{sender_name}}</p>
+{{#signature}}<div style="padding-top:16px;border-top:1px solid #E5E5E4;">{{signature}}</div>{{/signature}}
+</td></tr>
+<tr><td style="padding:8px 48px 36px;font-size:12px;color:#9CA3AF;">{{#sender_email}}<a href="{{sender_email_url}}" style="color:#9CA3AF;text-decoration:none;">{{sender_email}}</a>{{/sender_email}}</td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>{{meeting_title}}</title>
+</head>
+<body style="margin:0;padding:0;background:#F6F7F9;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F6F7F9;">
+<tr><td align="center" style="padding:32px 16px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;background:#FFFFFF;border-radius:20px;border:1px solid #E8EAEE;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+<tr><td style="padding:32px 36px 28px;background:#2563EB;border-radius:20px 20px 0 0;">
+<p style="margin:0 0 10px;font-size:12px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#CFDCFB;">Meeting invitation</p>
+<h1 style="margin:0;font-size:26px;line-height:1.25;font-weight:700;color:#FFFFFF;">{{meeting_title}}</h1>
+</td></tr>
+<tr><td style="padding:28px 36px 8px;">
+<p style="margin:0 0 16px;font-size:15px;line-height:1.65;color:#374151;">Hi {{#recipient_name}}{{recipient_name}}{{/recipient_name}}{{^recipient_name}}there{{/recipient_name}},</p>
+{{message}}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:8px 0 24px;background:#F6F7F9;border-radius:16px;">
+<tr><td style="padding:18px 20px 6px;">
+<p style="margin:0;font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#8A909B;">When</p>
+<p style="margin:4px 0 0;font-size:16px;font-weight:600;color:#16181D;">{{date}}</p>
+<p style="margin:2px 0 0;font-size:15px;color:#374151;">{{time}}</p>
+</td></tr>
+{{#location}}<tr><td style="padding:12px 20px 6px;">
+<p style="margin:0;font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#8A909B;">Where</p>
+<p style="margin:4px 0 0;font-size:15px;color:#16181D;">{{location}}</p>
+</td></tr>{{/location}}
+<tr><td style="padding:0 0 12px;font-size:0;line-height:0;">&nbsp;</td></tr>
+</table>
+{{#meeting_link}}<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 28px;"><tr><td style="border-radius:12px;background:#2563EB;">
+<a href="{{meeting_link}}" style="display:inline-block;padding:14px 26px;font-size:15px;font-weight:600;color:#FFFFFF;text-decoration:none;">Join the call &rarr;</a>
+</td></tr></table>{{/meeting_link}}
+{{#agenda}}<p style="margin:0 0 10px;font-size:13px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#16181D;">Agenda</p>
+<ol style="margin:0 0 24px;padding-left:20px;">{{agenda}}</ol>{{/agenda}}
+<p style="margin:0 0 4px;font-size:15px;line-height:1.65;color:#374151;">Looking forward to it,</p>
+<p style="margin:0 0 24px;font-size:15px;font-weight:600;color:#16181D;">{{sender_name}}</p>
+{{#signature}}<div style="padding-top:16px;border-top:1px solid #E8EAEE;">{{signature}}</div>{{/signature}}
+</td></tr>
+<tr><td style="padding:16px 36px 28px;font-size:12px;color:#8A909B;">Please reply to confirm{{#sender_email}} &middot; <a href="{{sender_email_url}}" style="color:#2563EB;text-decoration:none;">{{sender_email}}</a>{{/sender_email}}</td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>
