@@ -1,0 +1,12 @@
+{
+  "name": "utility",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "npm --prefix frontend run build && cargo build --target wasm32-wasip1 --release",
+    "tauri": "tauri"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.11.4"
+  }
+}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Application for {{position}}</title>
+</head>
+<body style="margin:0;padding:0;background:#F6F7F9;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F6F7F9;">
+<tr><td align="center" style="padding:32px 16px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;background:#FFFFFF;border-radius:16px;border:1px solid #E8EAEE;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+<tr><td style="padding:36px 40px 24px;border-bottom:1px solid #E8EAEE;">
+<p style="margin:0;font-size:26px;font-weight:700;letter-spacing:-0.01em;color:#16181D;">{{sender_name}}</p>
+<p style="margin:6px 0 0;font-size:14px;color:#6A41D8;font-weight:600;">Application &middot; {{position}} at {{company}}</p>
+<p style="margin:10px 0 0;font-size:13px;color:#8A909B;">{{#sender_email}}<a href="{{sender_email_url}}" style="color:#8A909B;text-decoration:none;">{{sender_email}}</a>{{/sender_email}}{{#phone}}{{#sender_email}} &middot; {{/sender_email}}{{phone}}{{/phone}}</p>
+</td></tr>
+<tr><td style="padding:28px 40px 8px;">
+<p style="margin:0 0 16px;font-size:15px;line-height:1.65;color:#374151;">Dear {{#hiring_manager}}{{hiring_manager}}{{/hiring_manager}}{{^hiring_manager}}Hiring Team{{/hiring_manager}},</p>
+{{body}}
+{{#highlights}}<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:4px 0 24px;background:#F2EDFD;border-radius:14px;"><tr><td style="padding:18px 20px 10px;">
+<p style="margin:0 0 10px;font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#6A41D8;">Highlights</p>
+<ul style="margin:0;padding-left:18px;">{{highlights}}</ul>
+</td></tr></table>{{/highlights}}
+{{#portfolio_url}}<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 12px;display:inline-table;"><tr><td style="border-radius:12px;background:#6A41D8;">
+<a href="{{portfolio_url}}" style="display:inline-block;padding:12px 22px;font-size:14px;font-weight:600;color:#FFFFFF;text-decoration:none;">View portfolio</a>
+</td></tr></table>{{/portfolio_url}}
+{{#resume_url}}<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 12px;display:inline-table;"><tr><td style="border-radius:12px;border:1px solid #D9DCE2;">
+<a href="{{resume_url}}" style="display:inline-block;padding:11px 22px;font-size:14px;font-weight:600;color:#16181D;text-decoration:none;">Download résumé</a>
+</td></tr></table>{{/resume_url}}
+<p style="margin:16px 0 4px;font-size:15px;line-height:1.65;color:#374151;">Thank you for your time and consideration.</p>
+<p style="margin:0 0 4px;font-size:15px;line-height:1.65;color:#374151;">Kind regards,</p>
+<p style="margin:0 0 24px;font-size:15px;font-weight:600;color:#16181D;">{{sender_name}}</p>
+{{#signature}}<div style="padding-top:16px;border-top:1px solid #E8EAEE;">{{signature}}</div>{{/signature}}
+</td></tr>
+<tr><td style="padding:0 40px 28px;font-size:0;line-height:0;">&nbsp;</td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>

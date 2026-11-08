@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Get well soon, {{name}}</title>
+</head>
+<body style="margin:0;padding:0;background:#E8F5F3;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#E8F5F3;">
+<tr><td align="center" style="padding:40px 16px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:520px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:#FFFFFF;border-radius:24px;">
+<tr><td align="center" style="padding:44px 40px 8px;">
+<p style="margin:0 0 10px;font-size:52px;line-height:1;">&#128144;</p>
+<p style="margin:0 0 24px;font-family:Georgia,'Times New Roman',serif;font-size:30px;font-style:italic;color:#0E7C86;">Get well soon, {{name}}</p>
+</td></tr>
+<tr><td style="padding:0 40px 8px;">
+{{message}}
+{{#offer}}<p style="margin:8px 0 24px;padding:16px 20px;border-radius:16px;background:#EDF7F6;font-family:Georgia,'Times New Roman',serif;font-size:16px;line-height:1.6;color:#0B5E66;">{{offer}}</p>{{/offer}}
+<p style="margin:8px 0 4px;font-family:Georgia,'Times New Roman',serif;font-size:15px;line-height:1.65;color:#3B3127;">{{#sign_off}}{{sign_off}}{{/sign_off}}{{^sign_off}}Thinking of you,{{/sign_off}}</p><p style="margin:0 0 24px;font-family:Georgia,'Times New Roman',serif;font-size:22px;font-style:italic;color:#16181D;">{{sender_name}}</p>
+{{#signature}}<div style="padding-top:16px;border-top:1px solid #D7ECE9;">{{signature}}</div>{{/signature}}
+</td></tr>
+<tr><td style="padding:8px 40px 36px;font-size:12px;color:#7BA9A3;">{{#sender_email}}<a href="{{sender_email_url}}" style="color:#7BA9A3;text-decoration:none;">{{sender_email}}</a>{{/sender_email}}</td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>

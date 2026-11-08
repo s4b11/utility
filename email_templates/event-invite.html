@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>{{event_name}}</title>
+</head>
+<body style="margin:0;padding:0;background:#F2EDFD;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F2EDFD;">
+<tr><td align="center" style="padding:36px 16px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:580px;background:#FFFFFF;border-radius:28px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+<tr><td align="center" style="padding:40px 36px 28px;background:#6A41D8;border-radius:28px 28px 0 0;">
+<p style="margin:0 0 12px;font-size:28px;line-height:1;">&#127881;</p>
+<p style="margin:0 0 8px;font-size:13px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#E4DAFB;">You're invited</p>
+<h1 style="margin:0;font-size:30px;line-height:1.2;font-weight:800;color:#FFFFFF;">{{event_name}}</h1>
+</td></tr>
+<tr><td style="padding:28px 32px 4px;">
+<p style="margin:0 0 16px;font-size:16px;line-height:1.65;color:#374151;">Hey {{#guest_name}}{{guest_name}}{{/guest_name}}{{^guest_name}}there{{/guest_name}}! &#128075;</p>
+{{message}}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:8px 0 24px;">
+<tr>
+<td width="50%" valign="top" style="padding:0 6px 12px 0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F2EDFD;border-radius:16px;"><tr><td style="padding:16px;">
+<p style="margin:0;font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#6A41D8;">&#128197; When</p>
+<p style="margin:6px 0 0;font-size:15px;font-weight:600;color:#16181D;">{{date}}</p>
+{{#time}}<p style="margin:2px 0 0;font-size:14px;color:#555B66;">{{time}}</p>{{/time}}
+</td></tr></table></td>
+<td width="50%" valign="top" style="padding:0 0 12px 6px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#FCEBF2;border-radius:16px;"><tr><td style="padding:16px;">
+<p style="margin:0;font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#B8386A;">&#128205; Where</p>
+<p style="margin:6px 0 0;font-size:15px;font-weight:600;color:#16181D;">{{#venue}}{{venue}}{{/venue}}{{^venue}}Details soon{{/venue}}</p>
+</td></tr></table></td>
+</tr>
+</table>
+{{#rsvp_url}}<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 12px;"><tr><td align="center" style="border-radius:999px;background:#6A41D8;">
+<a href="{{rsvp_url}}" style="display:block;padding:15px 24px;font-size:16px;font-weight:700;color:#FFFFFF;text-decoration:none;">Count me in!</a>
+</td></tr></table>{{/rsvp_url}}
+{{#rsvp_by}}<p style="margin:0 0 20px;font-size:13px;color:#8A909B;text-align:center;">Please RSVP by {{rsvp_by}}</p>{{/rsvp_by}}
+<p style="margin:12px 0 4px;font-size:16px;line-height:1.65;color:#374151;">See you there,</p>
+<p style="margin:0 0 24px;font-size:16px;font-weight:700;color:#16181D;">{{sender_name}}</p>
+{{#signature}}<div style="padding-top:16px;border-top:1px solid #E8EAEE;">{{signature}}</div>{{/signature}}
+</td></tr>
+<tr><td style="padding:0 32px 24px;font-size:0;line-height:0;">&nbsp;</td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,443 @@
+/* ==================================================================
+   App layer on top of the Material 3 Expressive component layer (m3e.css).
+
+   m3e.css is copied verbatim from docs/design/components.html and is never edited.
+   This file only:
+     1. adapts markup the app shares across many forms (label + control) to the
+        outlined text field of DESIGN.md 4.8, with the label floated on the border;
+     2. styles app-only structures from the spec's roles, scale, shapes and springs
+        (detail lists, tags, inline metadata, filter rows, code panes, ...).
+   Every colour is a role (DESIGN.md rule 1). No raw hex values.
+   ================================================================== */
+
+:root{
+  --tf-bg:var(--md-sys-color-surface);
+  /* Navigation bar (compact) height, used for page padding and floating actions. */
+  --nav-bar-h:80px;
+}
+
+/* ---------- 2.8 Icons: Lucide renders the spec's 2 px outlined, round style ---------- */
+svg.lucide{stroke-width:2}
+svg.lucide.i{flex:none}
+/* UI scale: text and icons at 80% of the spec on phones and narrow windows, spec size on
+   desktop. Text lengths are rewritten to use --ui-text-scale by postcss-ui-scale.js; icons
+   zoom whatever sets their size (--ico, Tailwind w-*, size props), while their containers
+   (icon buttons, rail indicators, chips) keep spec size. */
+:root{--ui-text-scale:.8;--ui-icon-scale:.8}
+@media (min-width:1024px){ :root{--ui-text-scale:1;--ui-icon-scale:1} }
+svg.lucide{zoom:var(--ui-icon-scale)}
+
+/* ---------- 2.7 State layer on every interactive component, without .sl in markup ---------- */
+:is(.btn,.icon-btn,.chip,.menu-item,.fab,.fab-menu-item,.pg-num,.th-sort,.status-select,.nav-dest,.tile){position:relative;isolation:isolate;overflow:hidden;-webkit-tap-highlight-color:transparent}
+:is(.btn,.icon-btn,.chip,.menu-item,.fab,.fab-menu-item,.pg-num,.th-sort,.status-select,.tile)::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:var(--sl-color,currentColor);opacity:0;pointer-events:none;transition:opacity var(--md-sys-motion-effects-fast)}
+:is(.btn,.icon-btn,.chip,.menu-item,.fab,.fab-menu-item,.pg-num,.th-sort,.status-select,.tile):hover::before{opacity:var(--md-sys-state-hover)}
+:is(.btn,.icon-btn,.chip,.menu-item,.fab,.fab-menu-item,.pg-num,.th-sort,.status-select,.tile):focus-visible::before{opacity:var(--md-sys-state-focus)}
+:is(.btn,.icon-btn,.chip,.menu-item,.fab,.fab-menu-item,.pg-num,.th-sort,.status-select,.tile):active::before{opacity:var(--md-sys-state-pressed)}
+:is(.btn,.icon-btn)[aria-disabled="true"]::before,:is(.btn,.icon-btn):disabled::before{display:none}
+@media (hover:none){
+  :is(.btn,.icon-btn,.chip,.menu-item,.fab,.fab-menu-item,.pg-num,.th-sort,.status-select,.tile):hover:not(:active)::before{opacity:0}
+}
+
+/* ---------- 4.1 Buttons: loading indicator size inside small buttons ---------- */
+.btn.xs > .loading{--size:24px}
+.icon-btn > .loading{--size:24px;display:none}
+.icon-btn.is-busy > .loading{display:block}
+.icon-btn.is-busy > :not(.loading){display:none}
+/* Stand-alone small loading indicators (inline status rows) */
+.loading.s{--size:24px}
+.loading.xs{--size:20px}
+
+/* Full-width buttons keep the button's flex layout even next to Tailwind's `.block` utility. */
+.btn.block{display:flex}
+
+/* ---------- 2.3 Type helpers ---------- */
+.tabular{font-variant-numeric:tabular-nums}
+.muted{color:var(--md-sys-color-on-surface-variant)}
+.font-mono,code,kbd,pre,samp{font-family:"Roboto Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+
+/* ---------- Brand lockup ---------- */
+.brand{display:inline-flex;align-items:center;gap:12px;color:var(--md-sys-color-on-surface);text-decoration:none;font:400 22px/28px var(--md-ref-typeface-brand)}
+.brand .mark{width:32px;height:32px;flex:none}
+
+/* ==================================================================
+   4.8 Text field: the app's `.field` (label, control, support text) rendered as an
+   outlined field whose label always floats on the border (`.tf.outlined.float`).
+   ================================================================== */
+.field{position:relative}
+.field > .field-label,.field > label.field-label{position:absolute;top:0;left:12px;z-index:1;max-width:calc(100% - 24px);padding:0 4px;transform:translateY(-50%);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:var(--tf-bg);font:400 12px/16px var(--md-ref-typeface-plain);letter-spacing:.4px;color:var(--md-sys-color-on-surface-variant);pointer-events:none;transition:color var(--md-sys-motion-effects-fast)}
+.field:focus-within > .field-label{color:var(--md-sys-color-primary)}
+.field .opt{margin-left:0;color:inherit;font-weight:400}
+.field > input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+.field > select,
+.field > textarea,
+.field > .select-wrap > select,
+.field > .control > input,
+.field .tf-box{display:block;width:100%;min-height:56px;margin:0;padding:0 16px;border:0;border-radius:var(--md-sys-shape-corner-extra-small);background:transparent;box-shadow:inset 0 0 0 1px var(--md-sys-color-outline);color:var(--md-sys-color-on-surface);caret-color:var(--md-sys-color-primary);font:400 16px/24px var(--md-ref-typeface-plain);letter-spacing:.5px;outline:none;transition:box-shadow var(--md-sys-motion-effects-fast)}
+.field > input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),.field > select,.field > .select-wrap > select,.field > .control > input{height:56px}
+.field > textarea,textarea.textarea{min-height:112px;padding:16px;resize:vertical}
+.field > input:hover,.field > select:hover,.field > textarea:hover,.field > .select-wrap > select:hover,.field > .control > input:hover,.field .tf-box:hover{box-shadow:inset 0 0 0 1px var(--md-sys-color-on-surface)}
+.field > input:focus,.field > select:focus,.field > textarea:focus,.field > .select-wrap > select:focus,.field > .control > input:focus,.field .tf-box:focus-within,.field .tf-box[aria-expanded="true"]{box-shadow:inset 0 0 0 2px var(--md-sys-color-primary)}
+.field ::placeholder{color:var(--md-sys-color-on-surface-variant);opacity:1}
+.field > input:disabled,.field > select:disabled,.field > textarea:disabled{color:color-mix(in srgb,var(--md-sys-color-on-surface) 38%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--md-sys-color-on-surface) 12%,transparent)}
+/* Support and error text (DESIGN.md 4.8): body-small, inset 16 */
+.field > p,.field > .field-hint,.field-error{margin:0;padding:0 16px;font:400 12px/16px var(--md-ref-typeface-plain);letter-spacing:.4px;color:var(--md-sys-color-on-surface-variant)}
+.field-error{color:var(--md-sys-color-error)}
+.field-error:empty{display:none}
+.field.invalid > input,.field.invalid > select,.field.invalid > textarea,.field.invalid > .control > input,.field.invalid .tf-box{box-shadow:inset 0 0 0 1px var(--md-sys-color-error)}
+.field.invalid > input:focus,.field.invalid > textarea:focus,.field.invalid > .control > input:focus{box-shadow:inset 0 0 0 2px var(--md-sys-color-error)}
+.field.invalid > .field-label,.field.invalid:focus-within > .field-label,.field.invalid .lead{color:var(--md-sys-color-error)}
+.field.invalid input{caret-color:var(--md-sys-color-error)}
+/* Select: trailing chevron (DESIGN.md 4.8 "Selects use the same field with .float") */
+.select-wrap{position:relative}
+.select-wrap select{appearance:none;-webkit-appearance:none;padding-right:48px!important;cursor:pointer}
+.select-wrap > .i{position:absolute;right:12px;top:50%;width:24px;height:24px;transform:translateY(-50%);color:var(--md-sys-color-on-surface-variant);pointer-events:none}
+select option{background:var(--md-sys-color-surface-container);color:var(--md-sys-color-on-surface)}
+/* Leading icon and trailing icon button */
+.control{position:relative;display:flex;align-items:center}
+.control > .lead{position:absolute;left:12px;width:24px;height:24px;color:var(--md-sys-color-on-surface-variant);pointer-events:none;z-index:1}
+.control > input{padding-left:52px!important}
+.control.has-trail > input{padding-right:52px!important}
+.control > .trail{position:absolute;right:4px;z-index:1}
+.control.no-lead > input{padding-left:16px!important}
+.control.has-trail-text > input{padding-right:96px!important}
+.control > .btn.trail{right:8px;margin:0}
+.field:has(.control > .lead) > .field-label{left:12px}
+.control input::-ms-reveal,.control input::-ms-clear{display:none}
+/* Read-only value box (DESIGN.md 4.8 readonly) */
+.readonly,.linkbox{display:flex;align-items:center;gap:8px;min-height:56px;padding:0 4px 0 16px;border-radius:var(--md-sys-shape-corner-extra-small);background:var(--md-sys-color-surface-container-high);color:var(--md-sys-color-on-surface-variant);font:400 14px/20px var(--md-ref-typeface-plain);letter-spacing:.25px}
+.linkbox > span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* Autofill keeps the field's own surface */
+.field input:-webkit-autofill{-webkit-text-fill-color:var(--md-sys-color-on-surface);box-shadow:inset 0 0 0 1px var(--md-sys-color-outline),0 0 0 1000px var(--tf-bg) inset;transition:background-color 9999s linear 0s}
+/* Checkbox rows inside forms */
+.field > .check-row{min-height:40px}
+/* Groups of chips inside a field (priority, presets): the label floats above them */
+.field.chips{padding-top:20px}
+.field.chips > .field-label{top:0;left:0;padding:0;transform:none;background:none}
+
+/* Sign-in card fields: filled text fields with leading icons (DESIGN.md 4.26) */
+.form-card .field > .control > input,.form-card .field > input{border-radius:var(--md-sys-shape-corner-extra-small) var(--md-sys-shape-corner-extra-small) 0 0;background:var(--md-sys-color-surface-container-highest);box-shadow:inset 0 -1px 0 var(--md-sys-color-on-surface-variant);padding-top:18px}
+.form-card .field > .control > input:focus,.form-card .field > input:focus{box-shadow:inset 0 -2px 0 var(--md-sys-color-primary)}
+.form-card .field.invalid > .control > input{box-shadow:inset 0 -2px 0 var(--md-sys-color-error)}
+.form-card .field > .field-label,.form-card .field:has(.control > .lead) > .field-label{top:8px;left:52px;transform:none;padding:0;background:none}
+.form-card .field:not(:has(.lead)) > .field-label{left:16px}
+.form-card .control > .lead{top:50%;transform:translateY(-50%)}
+
+/* ==================================================================
+   Page structure
+   ================================================================== */
+/* Body content scrolls under a top app bar (4.14), next to a rail (4.15) on wide windows
+   and above a navigation bar on compact ones. */
+.page-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.filter-bar{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.filter-bar > .search-bar{flex:1 1 280px}
+.filter-chips{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+@media (max-width:839px){
+  .filter-bar > .search-bar{flex-basis:100%;max-width:none}
+}
+/* Search bar inside filter rows keeps its trailing clear button inside (4.9) */
+.search-bar > .search-clear{flex:none}
+.search-bar > .sr + input,.search-bar > input{padding-left:0}
+
+/* Section titles inside a page (headline-small per DESIGN.md 2.3) */
+.section-title{margin:0;font:400 24px/32px var(--md-ref-typeface-brand);color:var(--md-sys-color-on-surface)}
+
+/* Card-style list container (outlined table container, 4.16) */
+.panel{border-radius:var(--md-sys-shape-corner-large);background:var(--md-sys-color-surface-container-lowest);box-shadow:inset 0 0 0 1px var(--md-sys-color-outline-variant);overflow:hidden;color:var(--md-sys-color-on-surface)}
+.panel-foot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 16px;min-height:64px;padding:8px 12px 8px 24px;border-top:1px solid var(--md-sys-color-outline-variant);font:400 14px/20px var(--md-ref-typeface-plain);letter-spacing:.25px;color:var(--md-sys-color-on-surface-variant);font-variant-numeric:tabular-nums}
+.foot-range{color:var(--md-sys-color-on-surface)}
+/* Interactive tile (tools grid): an elevated card with a state layer */
+.tile{display:flex;flex-direction:column;align-items:flex-start;gap:12px;min-width:0;padding:16px;border:0;border-radius:var(--md-sys-shape-corner-large);background:var(--md-sys-color-surface-container);color:var(--md-sys-color-on-surface);text-align:left;text-decoration:none;transition:border-radius var(--md-sys-motion-spatial-fast)}
+.tile:active{border-radius:var(--md-sys-shape-corner-medium)}
+
+/* 4.16 Data table: sort arrow wrapper used by the app's headers */
+.th-sort .sort-ico{display:inline-grid;place-items:center}
+.th-sort .sort-ico .i{opacity:0;transition:opacity var(--md-sys-motion-effects-fast),transform var(--md-sys-motion-spatial-default)}
+.th-sort:hover .sort-ico .i{opacity:.6}
+.th-sort.on .sort-ico .i{opacity:1;color:var(--md-sys-color-primary)}
+.table .c-num{text-align:right;font-variant-numeric:tabular-nums}
+.table tr.empty:hover{background:transparent}
+.table tr.empty td{padding:48px 16px!important;text-align:center}
+@media (max-width:839px){
+  .table tr.empty{display:block}
+  .table td.c-num{text-align:left}
+  .table td.c-actions{border-top:0!important}
+}
+
+/* 4.11 Status label used as a menu trigger (DESIGN.md 10: status select -> chip opening a menu) */
+.status-select{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 8px 0 12px;border:0;border-radius:var(--md-sys-shape-corner-small);background:var(--tone-container);color:var(--on-tone-container);font:500 12px/16px var(--md-ref-typeface-plain);letter-spacing:.5px;white-space:nowrap;transition:border-radius var(--md-sys-motion-spatial-fast)}
+.status-select[aria-expanded="true"]{border-radius:var(--md-sys-shape-corner-medium)}
+.status-select .dot{width:8px;height:8px;border-radius:50%;background:var(--tone);flex:none}
+.status-select .i{width:18px;height:18px;transition:transform var(--md-sys-motion-spatial-default)}
+.status-select[aria-expanded="true"] .i{transform:rotate(180deg)}
+
+/* Tags fold into the status label (DESIGN.md 10), neutral tone, compact */
+.tag{display:inline-flex;align-items:center;gap:4px;height:24px;max-width:100%;padding:0 8px;border-radius:var(--md-sys-shape-corner-small);background:var(--md-sys-color-surface-container-highest);color:var(--md-sys-color-on-surface-variant);font:500 12px/16px var(--md-ref-typeface-plain);letter-spacing:.5px;white-space:nowrap}
+.tag .i{width:16px;height:16px}
+/* Inline metadata (recurrence, reminder, counts) */
+.mini{display:inline-flex;align-items:center;gap:4px;height:24px;padding:0 8px;border-radius:var(--md-sys-shape-corner-small);background:var(--md-sys-color-surface-container-high);color:var(--md-sys-color-on-surface-variant);font:500 12px/16px var(--md-ref-typeface-plain);letter-spacing:.5px}
+.mini .i{width:16px;height:16px}
+.with-ico{display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+.with-ico .i{width:18px;height:18px;color:var(--md-sys-color-on-surface-variant)}
+.ok-note{display:inline-flex;align-items:center;gap:4px;color:var(--md-ext-color-success);font:500 12px/16px var(--md-ref-typeface-plain);letter-spacing:.5px}
+.ok-note .i{width:16px;height:16px}
+.inc{display:inline-flex;flex-wrap:wrap;gap:8px}
+.stack{display:flex;flex-direction:column;gap:2px}
+.strong{color:var(--md-sys-color-on-surface)}
+.src{margin-top:2px;color:var(--md-sys-color-on-surface-variant);font:400 12px/16px var(--md-ref-typeface-plain);letter-spacing:.4px}
+.cell-title{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+/* .dot without a status wrapper (task priority, legend) */
+.dot{display:inline-block;flex:none;width:8px;height:8px;border-radius:50%;background:var(--tone,currentColor)}
+
+/* KPI shapes cycle through the four the spec assigns (DESIGN.md 2.4) */
+.kpis > :nth-child(4n+2) .shape-icon{clip-path:var(--shape-clover-4)}
+.kpis > :nth-child(4n+3) .shape-icon{clip-path:var(--shape-sunny)}
+.kpis > :nth-child(4n+4) .shape-icon{clip-path:var(--shape-soft-burst)}
+.kpi{color:var(--md-sys-color-on-surface)}
+button.kpi{border:0;text-align:left;transition:border-radius var(--md-sys-motion-spatial-fast)}
+button.kpi:active{border-radius:var(--md-sys-shape-corner-medium)}
+/* Library shape for decorative tone icons outside KPI cards */
+.shape-icon{display:grid;place-items:center;flex:none;width:40px;height:40px;background:var(--tone-container);color:var(--on-tone-container);clip-path:var(--shape-cookie-9)}
+.shape-icon .i{width:20px;height:20px}
+.shape-icon.s{width:32px;height:32px}
+.shape-icon.s .i{width:18px;height:18px}
+.shape-icon.round{clip-path:none;border-radius:var(--md-sys-shape-corner-medium)}
+
+/* Chips: presets in pickers keep the 32 px chip with a selected container (4.10) */
+.chip.on .chev{color:inherit}
+.chip > .dot{width:8px;height:8px}
+
+/* 4.12 Segmented list used for label / value details (side sheet body, 4.25) */
+.kv{display:flex;flex-direction:column;gap:2px;margin:0;padding:0}
+.kv > div{display:flex;flex-direction:column;gap:2px;min-height:56px;padding:8px 16px;background:var(--md-sys-color-surface-container-lowest);border-radius:var(--md-sys-shape-corner-extra-small)}
+.kv > div:first-child{border-radius:var(--md-sys-shape-corner-large) var(--md-sys-shape-corner-large) var(--md-sys-shape-corner-extra-small) var(--md-sys-shape-corner-extra-small)}
+.kv > div:last-child{border-radius:var(--md-sys-shape-corner-extra-small) var(--md-sys-shape-corner-extra-small) var(--md-sys-shape-corner-large) var(--md-sys-shape-corner-large)}
+.kv > div:only-child{border-radius:var(--md-sys-shape-corner-large)}
+.kv dt{font:500 12px/16px var(--md-ref-typeface-plain);letter-spacing:.5px;color:var(--md-sys-color-on-surface-variant)}
+.kv dd{margin:0;min-width:0;font:400 16px/24px var(--md-ref-typeface-plain);letter-spacing:.5px;color:var(--md-sys-color-on-surface);overflow-wrap:anywhere}
+.dialog-card .kv > div,.sheet-card .kv > div{background:var(--md-sys-color-surface-container-lowest)}
+
+/* Popover form inputs (date range presets) */
+.input{width:100%;height:56px;padding:0 16px;border:0;border-radius:var(--md-sys-shape-corner-extra-small);background:transparent;box-shadow:inset 0 0 0 1px var(--md-sys-color-outline);color:var(--md-sys-color-on-surface);font:400 16px/24px var(--md-ref-typeface-plain);outline:none}
+.input:focus{box-shadow:inset 0 0 0 2px var(--md-sys-color-primary)}
+.date-fields label{display:flex;flex-direction:column;gap:4px;font:400 12px/16px var(--md-ref-typeface-plain);letter-spacing:.4px;color:var(--md-sys-color-on-surface-variant)}
+.pop-empty{display:flex;flex-direction:column;align-items:center;gap:4px;padding:16px 8px 8px;text-align:center}
+.pop-empty p{margin:0;color:var(--md-sys-color-on-surface-variant)}
+.menu-item .tick{color:var(--md-sys-color-primary)}
+.menu-label{margin:0;padding:8px 12px 4px;font:500 12px/16px var(--md-ref-typeface-plain);letter-spacing:.5px;color:var(--md-sys-color-on-surface-variant)}
+
+/* ==================================================================
+   Navigation: rail (4.15) on wide windows, navigation bar on compact ones.
+   The navigation bar reuses the rail item anatomy (56 x 32 indicator, label-medium)
+   laid out in a row on surface-container, as Material's navigation bar does.
+   ================================================================== */
+/* Head (brand) and foot (Ask AI, account) stay put; the menu between them scrolls. */
+.rail{height:100%;overflow:hidden}
+.rail-scroll{flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain}
+.rail .rail-head,.rail .rail-foot{flex:none}
+.rail .rail-item{text-decoration:none}
+.rail-foot{margin-top:auto;padding:16px 20px 0 28px}
+.rail.expanded .rail-foot{padding:16px 12px 0}
+.rail .brand{padding:0 0 0 4px}
+.nav-bar{position:fixed;inset:auto 0 0 0;z-index:30;display:flex;justify-content:space-around;align-items:flex-start;height:calc(var(--nav-bar-h) + env(safe-area-inset-bottom,0px));padding:12px 8px env(safe-area-inset-bottom,0px);background:var(--md-sys-color-surface-container);color:var(--md-sys-color-on-surface-variant)}
+.nav-bar .rail-item{flex:1;min-width:0;width:auto;align-items:center}
+.nav-bar .rail-item[aria-current="page"]{color:var(--md-sys-color-on-surface)}
+.nav-bar .rail-lbl{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* 4.14 Top app bar extras: account avatar button and notification badge */
+.app-bar{position:relative;z-index:20}
+.app-bar .avatar-btn{display:grid;place-items:center;width:48px;height:48px;padding:0;border:0;border-radius:50%;background:none}
+.app-bar .badge-host > .badge{pointer-events:none}
+
+/* Account entry in the rail footer */
+.account{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;padding:8px 12px;border:0;border-radius:var(--md-sys-shape-corner-full);background:transparent;color:var(--md-sys-color-on-surface);text-align:left}
+.acc-text{display:flex;flex-direction:column;flex:1;min-width:0}
+.acc-text b{font:500 14px/20px var(--md-ref-typeface-plain);letter-spacing:.1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.acc-text small{font:400 12px/16px var(--md-ref-typeface-plain);letter-spacing:.4px;color:var(--md-sys-color-on-surface-variant)}
+.rail:not(.expanded) .acc-text,.rail:not(.expanded) .acc-chev{display:none}
+
+/* 4.5 Extended FAB for a view's create action, floating above the navigation bar */
+.fab-dock{position:fixed;right:16px;bottom:calc(var(--nav-bar-h) + 16px + env(safe-area-inset-bottom,0px));z-index:25}
+@media (min-width:840px){ .fab-dock{position:static} }
+
+/* ==================================================================
+   4.24 / 4.25 Dialog and side sheet as rendered by components/ui/Modal.tsx
+   (React keeps the layer mounted and animates with .closing instead of <dialog>).
+   ================================================================== */
+.modal-layer{position:fixed;inset:0;z-index:50;display:grid;grid-template-rows:minmax(0,1fr);grid-template-columns:minmax(0,1fr);place-items:center;padding:24px}
+/* The single row is the layer's height, never the content's: long dialogs and sheets scroll their body. */
+.modal-layer > .dialog,.modal-layer > .side-sheet{min-height:0}
+.modal-scrim{position:absolute;inset:0;background:color-mix(in srgb,var(--md-sys-color-scrim) 32%,transparent);animation:fade-in var(--md-sys-motion-effects-default)}
+.modal-layer.closing .modal-scrim{opacity:0;transition:opacity var(--md-sys-motion-effects-fast)}
+.modal-layer > .dialog{position:relative;display:flex;max-height:100%}
+.modal-layer > .dialog > .dialog-card{width:100%}
+.modal-layer.closing .dialog-card{animation:dialog-out var(--md-sys-motion-effects-fast) forwards}
+.dialog-head{display:flex;align-items:flex-start;gap:8px;margin:0 0 16px}
+.dialog-head .dialog-headline{flex:1;margin:0;min-width:0;overflow-wrap:anywhere}
+.dialog-head .icon-btn{margin:-4px -8px 0 0}
+.dialog-card .dialog-support{margin:-8px 0 16px}
+.dialog-body{margin-left:-24px;margin-right:-24px;padding-left:24px;padding-right:24px}
+.dialog-actions > .grow{flex:1}
+.modal-layer.sheet{place-items:stretch end;padding:16px}
+.modal-layer.sheet > .side-sheet{position:relative;inset:auto;margin:0;height:100%}
+.modal-layer.sheet.closing .sheet-card{animation:sheet-out var(--md-sys-motion-effects-default) forwards}
+@media (max-width:599px){
+  .modal-layer{padding:16px}
+  .dialog-body{margin-left:-20px;margin-right:-20px;padding-left:20px;padding-right:20px}
+  .modal-layer.sheet{padding:0}
+  .modal-layer.sheet > .side-sheet{width:100vw}
+  .modal-layer.sheet .sheet-card{border-radius:0}
+}
+
+/* 4.23 Snackbar host rendered by ToastContext */
+.snackbars{display:flex;flex-direction:column;align-items:center;gap:8px}
+@media (max-width:1023px){ body.has-nav-bar .snackbars{bottom:calc(var(--nav-bar-h) + 16px + env(safe-area-inset-bottom,0px))} }
+
+/* 4.22 Tooltip rendered by TooltipHost (always in the top layer when supported) */
+.tip{white-space:normal}
+
+/* 4.19 Empty state: compact padding inside panels */
+.empty.bare{padding:40px 16px}
+
+/* Pagination buttons rendered as <button> without .pg-num */
+.pager button:not(.icon-btn){display:inline-grid;place-items:center;min-width:40px;height:40px;padding:0 8px;border:0;border-radius:var(--md-sys-shape-corner-full);background:transparent;color:var(--md-sys-color-on-surface-variant);font:500 14px/20px var(--md-ref-typeface-plain);letter-spacing:.1px;font-variant-numeric:tabular-nums}
+.pager button[aria-current="page"]{border-radius:var(--md-sys-shape-corner-medium);background:var(--md-sys-color-secondary-container);color:var(--md-sys-color-on-secondary-container)}
+.pager button:disabled{opacity:.38;cursor:default}
+
+/* Pull to refresh indicator: the spec's contained loading indicator (4.20) */
+.pull-ind{width:48px;height:48px;border-radius:50%;background:var(--md-sys-color-primary-container);color:var(--md-sys-color-on-primary-container);box-shadow:var(--md-sys-elevation-level3);display:grid;place-items:center}
+.pull-ind .loading{--size:48px}
+
+/* Rendered Markdown (server-sanitised) and AI replies: type scale and roles only */
+.md-body{font:400 14px/20px var(--md-ref-typeface-plain);letter-spacing:.25px;color:var(--md-sys-color-on-surface-variant);user-select:text;-webkit-user-select:text}
+.md-body > :first-child{margin-top:0!important}
+.md-body > :last-child{margin-bottom:0!important}
+.md-body h1,.md-body h2,.md-body h3,.md-body h4,.md-body h5,.md-body h6{color:var(--md-sys-color-on-surface);font-family:var(--md-ref-typeface-brand);font-weight:400}
+.md-body h1{font-size:28px;line-height:36px;margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--md-sys-color-outline-variant)}
+.md-body h2{font-size:24px;line-height:32px;margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--md-sys-color-outline-variant)}
+.md-body h3{font-size:22px;line-height:28px;margin:18px 0 8px}
+.md-body h4{font:500 16px/24px var(--md-ref-typeface-plain);letter-spacing:.15px;margin:16px 0 6px}
+.md-body h5,.md-body h6{font:500 14px/20px var(--md-ref-typeface-plain);letter-spacing:.1px;margin:12px 0 4px}
+.md-body p{margin:12px 0}
+.md-body a{color:var(--md-sys-color-primary);text-decoration:underline;text-underline-offset:2px;font-weight:500}
+.md-body ul{list-style:disc;padding-left:24px;margin:12px 0}
+.md-body ol{list-style:decimal;padding-left:24px;margin:12px 0}
+.md-body li{margin:4px 0}
+.md-body li > p{margin:4px 0}
+.md-body strong{color:var(--md-sys-color-on-surface);font-weight:500}
+.md-body code{font-size:.86em;background:var(--md-sys-color-surface-container-highest);color:var(--md-sys-color-on-surface);border-radius:var(--md-sys-shape-corner-extra-small);padding:1px 6px}
+.md-body pre{background:var(--md-sys-color-surface-container-high);color:var(--md-sys-color-on-surface);border-radius:var(--md-sys-shape-corner-medium);padding:16px;overflow-x:auto;margin:16px 0;font-size:12.5px;line-height:1.55}
+.md-body pre code{background:transparent;padding:0;border-radius:0;font-size:inherit}
+.md-body blockquote{border-left:4px solid var(--md-sys-color-primary);background:var(--md-sys-color-surface-container);border-radius:0 var(--md-sys-shape-corner-medium) var(--md-sys-shape-corner-medium) 0;padding:12px 16px;color:var(--md-sys-color-on-surface-variant);margin:16px 0}
+.md-body blockquote > :first-child{margin-top:0}
+.md-body blockquote > :last-child{margin-bottom:0}
+.md-body table{width:100%;border-collapse:collapse;margin:16px 0}
+.md-body th,.md-body td{border-bottom:1px solid var(--md-sys-color-outline-variant);padding:12px 16px;text-align:left}
+.md-body th{font:500 14px/20px var(--md-ref-typeface-plain);letter-spacing:.1px;color:var(--md-sys-color-on-surface-variant)}
+.md-body hr{border:0;border-top:1px solid var(--md-sys-color-outline-variant);margin:24px 0}
+.md-body img{max-width:100%;border-radius:var(--md-sys-shape-corner-medium)}
+.md-body input[type='checkbox']{margin-right:8px;accent-color:var(--md-sys-color-primary)}
+.agent-markdown{overflow-wrap:anywhere;user-select:text;-webkit-user-select:text}
+.agent-markdown-table{max-width:100%;overflow-x:auto;margin:16px 0}
+.agent-markdown-table table{margin:0}
+
+/* Window size classes (DESIGN.md 9) for app structures */
+@media (max-width:599px){
+  .panel-foot{padding-left:16px}
+}
+
+/* 4.5 The view's create action: the app-bar filled button on wide windows, an extended FAB
+   floating above the navigation bar on compact ones (DESIGN.md 5.1 "Create a record"). */
+@media (max-width:1023px){
+  /* Compact extended FAB: 44 tall (the 56 spec size felt heavy over lists), same anatomy. */
+  .btn.create-fab{--r-round:var(--md-sys-shape-corner-medium);position:fixed;right:16px;bottom:calc(var(--nav-bar-h) + 16px + env(safe-area-inset-bottom,0px));z-index:25;
+    --h:44px;--ico:20px;gap:8px;min-width:44px;margin:0;padding:0 16px 0 12px;flex:none;border-radius:var(--md-sys-shape-corner-medium);
+    background:var(--md-sys-color-primary-container);color:var(--md-sys-color-on-primary-container);box-shadow:var(--md-sys-elevation-level3);
+    font:500 14px/20px var(--md-ref-typeface-plain);letter-spacing:.1px}
+  .btn.create-fab:hover{box-shadow:var(--md-sys-elevation-level4)}
+}
+
+/* The sort chip stands in for sortable table headers on compact windows (4.16). */
+@media (min-width:840px){ .sort-chip{display:none} }
+
+/* Pull to refresh: the pull indicator is the only loading indicator while a pull reloads the page. */
+.pull-refreshing .page-loading{visibility:hidden}
+
+/* Compact windows: room between the search bar and the filter chips below it. */
+@media (max-width:839px){
+  .filter-bar{row-gap:20px;padding-block:8px}
+}
+
+/* Buttons keep their shape while pressed (no corner morph to a near-square and back);
+   the state layer and ripple still show the press. Connected groups keep their own
+   outer, inner and selected corners. */
+.btn:active:not([aria-disabled="true"]):not(:disabled){border-radius:var(--r-round)}
+.btn.square:active:not([aria-disabled="true"]):not(:disabled){border-radius:var(--r-square)}
+.connected > .btn:active:not([aria-disabled="true"]):not(:disabled){border-radius:var(--r-in)}
+.connected > .btn:first-child:active:not([aria-disabled="true"]):not(:disabled){border-radius:var(--md-sys-shape-corner-full) var(--r-in) var(--r-in) var(--md-sys-shape-corner-full)}
+.connected > .btn:last-child:active:not([aria-disabled="true"]):not(:disabled){border-radius:var(--r-in) var(--md-sys-shape-corner-full) var(--md-sys-shape-corner-full) var(--r-in)}
+.connected > .btn[aria-checked="true"]:active:not([aria-disabled="true"]):not(:disabled),.connected > .btn[aria-pressed="true"]:active:not([aria-disabled="true"]):not(:disabled){border-radius:var(--md-sys-shape-corner-full)}
+.split > .btn:first-child:active:not([aria-disabled="true"]):not(:disabled){border-radius:var(--md-sys-shape-corner-full) var(--md-sys-shape-corner-extra-small) var(--md-sys-shape-corner-extra-small) var(--md-sys-shape-corner-full)}
+.split > .btn.split-trail:active:not([aria-disabled="true"]):not(:disabled){border-radius:var(--md-sys-shape-corner-extra-small) var(--md-sys-shape-corner-full) var(--md-sys-shape-corner-full) var(--md-sys-shape-corner-extra-small)}
+
+/* Long lists (Jobs): the "show more" sentinel, and off-screen row cards skip layout and paint on phones. */
+.load-more{display:flex;justify-content:center;padding:8px 16px;border-top:1px solid var(--md-sys-color-outline-variant)}
+@media (max-width:720px){ .table tbody tr{content-visibility:auto;contain-intrinsic-size:auto 220px} }
+
+/* Notification centre (NotificationsSheet): segmented list rows, the row body opens the item. */
+.notif-section + .notif-section{margin-top:16px}
+.notif-section-label{margin:0;padding:8px 4px;font:500 14px/20px var(--md-ref-typeface-plain);letter-spacing:.1px;color:var(--md-sys-color-on-surface-variant)}
+.list-item.notif-item{flex-wrap:wrap;align-items:flex-start;gap:0;padding:0 4px 0 0}
+.notif-main{position:relative;display:flex;align-items:flex-start;gap:16px;flex:1;min-width:0;margin:0;padding:12px 8px 12px 16px;border:0;border-radius:inherit;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.notif-main:hover{background:color-mix(in srgb,var(--md-sys-color-on-surface) 8%,transparent)}
+.notif-main:focus-visible{outline:2px solid var(--md-sys-color-secondary);outline-offset:-2px}
+.notif-item .notif-clear{margin:8px 0 0;flex:none}
+.notif-item.unread{background:color-mix(in srgb,var(--md-sys-color-primary) 6%,var(--md-sys-color-surface-container-lowest))}
+.notif-dot{display:inline-block;width:8px;height:8px;margin:0 8px 2px 0;border-radius:50%;background:var(--md-sys-color-primary);vertical-align:middle}
+.notif-actions{display:flex;flex-wrap:wrap;gap:8px;flex-basis:100%;padding:0 16px 12px 72px}
+@media (max-width:480px){ .notif-actions{padding-left:16px} }
+
+/* Rail head: the app icon and name. Hover or focus turns the icon into the menu icon; it
+   collapses / expands the rail. Collapsed, every control is centred on the rail's 48px axis. */
+.rail .rail-head{flex-direction:row;align-items:center;padding:0 20px 24px}
+.rail.expanded .rail-head{padding:0 12px 20px}
+.rail-brand{display:flex;align-items:center;gap:12px;width:56px;height:48px;padding:0 8px;border:0;border-radius:var(--md-sys-shape-corner-full);background:none;color:var(--md-sys-color-on-surface);cursor:pointer;overflow:hidden;transition:width var(--md-sys-motion-spatial-default)}
+.rail.expanded .rail-brand{width:100%}
+.rail-brand:focus-visible{outline:3px solid var(--md-sys-color-secondary);outline-offset:2px}
+.rail-brand-ico{position:relative;display:grid;place-items:center;flex:none;width:40px;height:40px;border-radius:var(--md-sys-shape-corner-full);transition:background-color var(--md-sys-motion-effects-fast)}
+.rail-brand-ico .mark{width:32px;height:32px;transition:opacity var(--md-sys-motion-effects-fast),transform var(--md-sys-motion-spatial-fast)}
+.rail-brand-ico .rail-brand-menu{position:absolute;inset:auto;opacity:0;transition:opacity var(--md-sys-motion-effects-fast)}
+.rail-brand:hover .rail-brand-ico,.rail-brand:focus-visible .rail-brand-ico{background:color-mix(in srgb,var(--md-sys-color-on-surface) 8%,transparent)}
+.rail-brand:hover .mark,.rail-brand:focus-visible .mark{opacity:0;transform:scale(.6)}
+.rail-brand:hover .rail-brand-menu,.rail-brand:focus-visible .rail-brand-menu{opacity:1}
+.rail-brand-name{font:400 22px/28px var(--md-ref-typeface-brand);white-space:nowrap;opacity:0;transition:opacity var(--md-sys-motion-effects-fast)}
+.rail.expanded .rail-brand-name{opacity:1}
+
+/* Rail foot: Ask AI (flat FAB) above the account. */
+.rail-foot{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.rail:not(.expanded) .rail-foot{padding:16px 20px 0}
+.rail:not(.expanded) .rail-foot .account{width:56px;justify-content:center;padding:8px 0}
+
+/* Desktop: room between the filter bar and what sits above / below it (KPI cards, tables). */
+@media (min-width:840px){ .filter-bar{margin-block:16px} }
+
+/* Thin custom scrollbars wherever a mouse is used (phones keep their overlay scrollbars). */
+@media (hover:hover) and (pointer:fine){
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{border:3px solid transparent;border-radius:999px;background:color-mix(in srgb,var(--md-sys-color-on-surface) 22%,transparent) padding-box}
+  ::-webkit-scrollbar-thumb:hover{background-color:color-mix(in srgb,var(--md-sys-color-on-surface) 38%,transparent)}
+  ::-webkit-scrollbar-corner,::-webkit-scrollbar-button{display:none;background:transparent}
+  @supports not selector(::-webkit-scrollbar){
+    *{scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--md-sys-color-on-surface) 25%,transparent) transparent}
+  }
+  /* The rail menu shows its thumb only while hovered. */
+  .rail-scroll::-webkit-scrollbar-thumb{background-color:transparent}
+  .rail-scroll:hover::-webkit-scrollbar-thumb{background-color:color-mix(in srgb,var(--md-sys-color-on-surface) 22%,transparent)}
+}
+
+/* Desktop frame: rail and app bar share a tinted surface; the page sits on a rounded sheet. */
+@media (min-width:1024px){
+  .app-has-nav.app-frame{background:var(--md-sys-color-surface-container)}
+  .app-frame .rail,.app-frame .app-bar,.app-frame .app-bar.scrolled{background:transparent}
+  .app-frame .page-sheet{margin:0 12px 12px 0;border-radius:var(--md-sys-shape-corner-extra-large);background:var(--md-sys-color-surface);overflow:hidden}
+  .app-frame .page-sheet > main{background:transparent;padding-top:20px}
+}

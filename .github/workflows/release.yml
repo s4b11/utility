@@ -1,0 +1,244 @@
+name: Release
+
+# CI/CD for main:
+#   1. CI           type-check + build the web frontend and the Spin wasm server
+#   2. Fermyon      deploy that exact build to Fermyon Cloud, then smoke-test it
+#   3. Android      build the Tauri Android app, align and sign utility.apk
+#   4. GitHub       publish utility.apk as a GitHub release
+# Fermyon and Android run in parallel once CI passes. Run it manually from the
+# Actions tab ("Run workflow") to redeploy or rebuild either part on its own.
+#
+# Repository secrets (Settings > Secrets and variables > Actions):
+#   FERMYON_PAT               required for the Fermyon deploy (personal access token)
+#   ANDROID_KEYSTORE_BASE64   optional, base64 of the release keystore (.jks / .p12)
+#   ANDROID_KEYSTORE_PASSWORD optional, keystore password (also the key password)
+#   ANDROID_KEY_ALIAS         optional, key alias (default "utility")
+# Without the Android secrets the APK is signed with a throwaway key per run, so it
+# installs fine but cannot update an install signed with a different key.
+#
+# App variables (wallet_key, webhook_secret, groq_api_key) are stored in Fermyon
+# Cloud and persist across deploys; this workflow never changes them. Manage them
+# with `spin cloud variables set --app personal-app name=value`.
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - 'tasks/**'
+      - '**/*.md'
+  workflow_dispatch:
+    inputs:
+      deploy_web:
+        description: Deploy the web app to Fermyon Cloud
+        type: boolean
+        default: true
+      build_apk:
+        description: Build the Android APK and publish a GitHub release
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  SPIN_VERSION: 3.6.3
+  APP_URL: https://utility.fermyon.app
+
+jobs:
+  ci:
+    name: CI
+    uses: ./.github/workflows/ci.yml
+
+  fermyon:
+    name: Deploy to Fermyon Cloud
+    needs: ci
+    # Opt-in: set the repository variable DEPLOY_FERMYON=true (and the FERMYON_PAT secret) to deploy.
+    if: vars.DEPLOY_FERMYON == 'true' && github.ref == 'refs/heads/main' && (github.event_name == 'push' || inputs.deploy_web)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: production
+      url: https://utility.fermyon.app
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download the CI build
+        uses: actions/download-artifact@v4
+        with:
+          name: web-dist
+          path: dist
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: server-wasm
+          path: target/wasm32-wasip1/release
+
+      - name: Install Spin and the cloud plugin
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP"
+          base="https://github.com/spinframework/spin/releases/download/v${SPIN_VERSION}"
+          tarball="spin-v${SPIN_VERSION}-linux-amd64.tar.gz"
+          curl -fsSLO "$base/$tarball"
+          curl -fsSLO "$base/checksums-v${SPIN_VERSION}.txt"
+          grep " ${tarball}\$" "checksums-v${SPIN_VERSION}.txt" | sha256sum -c -
+          tar xzf "$tarball" spin
+          sudo install -m 0755 spin /usr/local/bin/spin
+          spin --version
+          spin plugins update
+          spin plugins install cloud --yes
+          spin cloud --version
+
+      - name: Log in to Fermyon Cloud
+        env:
+          FERMYON_PAT: ${{ secrets.FERMYON_PAT }}
+        run: |
+          if [ -z "${FERMYON_PAT:-}" ]; then
+            echo "::error::Add the FERMYON_PAT repository secret (Settings > Secrets and variables > Actions) to deploy."
+            exit 1
+          fi
+          spin cloud login --auth-method token --token "$FERMYON_PAT"
+
+      - name: Deploy
+        run: |
+          set -euo pipefail
+          test -f dist/index.html
+          test -f target/wasm32-wasip1/release/personal_app.wasm
+          spin cloud deploy
+
+      - name: Smoke test
+        run: |
+          set -euo pipefail
+          # The page must reference the bundle this run built, and the API must answer.
+          bundle=$(grep -o 'assets/index-[A-Za-z0-9_-]*\.js' dist/index.html | head -n1)
+          for i in $(seq 1 30); do
+            page=$(curl -fsS "$APP_URL/" || true)
+            api=$(curl -fsS "$APP_URL/api/setup-status" || true)
+            if grep -q "$bundle" <<<"$page" && grep -q '"needs_setup"' <<<"$api"; then
+              echo "Live: $APP_URL serves $bundle"
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "::error::$APP_URL did not serve $bundle with a working API after deploy."
+          exit 1
+
+  android:
+    name: Build Android APK
+    needs: ci
+    if: github.event_name == 'push' || inputs.build_apk
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      NDK_VERSION: 27.0.12077973
+      BUILD_TOOLS: 35.0.0
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            frontend/package-lock.json
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      # ubuntu-latest ships the Android SDK at $ANDROID_HOME with cmdline-tools/latest.
+      - name: Install Android SDK packages
+        run: |
+          SDKM="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          yes | "$SDKM" --licenses > /dev/null || true
+          "$SDKM" "platforms;android-36" "build-tools;${BUILD_TOOLS}" "ndk;${NDK_VERSION}" "platform-tools"
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: Install npm dependencies
+        run: |
+          npm ci
+          npm --prefix frontend ci
+
+      - name: Build APK
+        run: |
+          export NDK_HOME="$ANDROID_HOME/ndk/$NDK_VERSION"
+          chmod +x src-tauri/gen/android/gradlew
+          npx tauri android build --apk --target aarch64 --ci
+
+      - name: Align and sign
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          set -euo pipefail
+          BT="$ANDROID_HOME/build-tools/$BUILD_TOOLS"
+          UNSIGNED=$(find src-tauri/gen/android/app/build/outputs/apk -name '*release-unsigned.apk' | head -n1)
+          test -n "$UNSIGNED"
+          if [ -n "${KEYSTORE_B64:-}" ]; then
+            echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/release.jks"
+            PASS="$KEYSTORE_PASSWORD"
+            ALIAS="${KEY_ALIAS:-utility}"
+          else
+            echo "::warning::ANDROID_KEYSTORE_BASE64 is not set; signing with a throwaway key for this run."
+            PASS=$(openssl rand -hex 16)
+            ALIAS=utility
+            keytool -genkeypair -keystore "$RUNNER_TEMP/release.jks" -storetype PKCS12 -alias "$ALIAS" \
+              -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=utility" -storepass "$PASS" -keypass "$PASS"
+          fi
+          "$BT/zipalign" -P 16 -f 4 "$UNSIGNED" "$RUNNER_TEMP/aligned.apk"
+          "$BT/apksigner" sign --ks "$RUNNER_TEMP/release.jks" --ks-key-alias "$ALIAS" \
+            --ks-pass "pass:$PASS" --key-pass "pass:$PASS" --out utility.apk "$RUNNER_TEMP/aligned.apk"
+          "$BT/apksigner" verify --print-certs utility.apk
+          rm -f "$RUNNER_TEMP/release.jks"
+          ls -l utility.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: utility-apk
+          path: utility.apk
+          if-no-files-found: error
+
+  github-release:
+    name: Publish GitHub release
+    needs: android
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: utility-apk
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          VERSION=$(node -p "require('./src-tauri/tauri.conf.json').version")
+          TAG="v${VERSION}-build.${GITHUB_RUN_NUMBER}"
+          SHORT="${GITHUB_SHA::7}"
+          {
+            echo "Android release APK (arm64) built from ${SHORT}."
+            echo
+            echo "Install \`utility.apk\` on the device. The web app at ${APP_URL} is deployed from the same commit."
+          } > "$RUNNER_TEMP/notes.md"
+          gh release create "$TAG" utility.apk \
+            --target "$GITHUB_SHA" \
+            --title "utility ${VERSION} (build ${GITHUB_RUN_NUMBER})" \
+            --notes-file "$RUNNER_TEMP/notes.md"
